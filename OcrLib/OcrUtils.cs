@@ -34,6 +34,7 @@ namespace OcrLiteLib
             return inputTensor;
         }
 
+
         public static Mat MakePadding(Mat src, int padding)
         {
             if (padding <= 0) return src;
@@ -148,6 +149,31 @@ namespace OcrLiteLib
             }
         }
 
+        public static Rectangle GetBoundingBox(List<Point> points)
+        {
+            if (points == null || points.Count == 0)
+                throw new ArgumentException("Points are null or empty");
+
+            int minX = points[0].X;
+            int minY = points[0].Y;
+            int maxX = points[0].X;
+            int maxY = points[0].Y;
+
+            foreach (var pt in points)
+            {
+                if (pt.X < minX) minX = pt.X;
+                if (pt.Y < minY) minY = pt.Y;
+                if (pt.X > maxX) maxX = pt.X;
+                if (pt.Y > maxY) maxY = pt.Y;
+            }
+
+            int width = maxX - minX;
+            int height = maxY - minY;
+
+            return new Rectangle(minX, minY, width, height);
+        }
+
+
         public static Mat MatRotateClockWise180(Mat src)
         {
             CvInvoke.Flip(src, src, FlipType.Vertical);
@@ -160,7 +186,6 @@ namespace OcrLiteLib
             CvInvoke.Rotate(src, src, RotateFlags.Rotate90CounterClockwise);
             return src;
         }
-
     }
 }
 
