@@ -3,6 +3,7 @@ using Emgu.CV.CvEnum;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Text;
 
 namespace OcrLiteLib
@@ -73,16 +74,51 @@ namespace OcrLiteLib
             var textBoxes = dbNet.GetTextBoxes(src, scale, boxScoreThresh, boxThresh, unClipRatio);
             var dbNetTime = (DateTime.Now.Ticks - startTicks) / 10000F;
 
-            Console.WriteLine($"TextBoxesSize({textBoxes.Count})");
-            textBoxes.ForEach(x => Console.WriteLine(x));
-            //Console.WriteLine($"dbNetTime({dbNetTime}ms)");
 
-            Console.WriteLine("---------- step: drawTextBoxes ----------");
-            OcrUtils.DrawTextBoxes(textBoxPaddingImg, textBoxes, thickness);
-            //CvInvoke.Imshow("ResultPadding", textBoxPaddingImg);
+            List<Rectangle> roiRects = new List<Rectangle>
+            {
+                //x, y, width, height
+                new Rectangle(300, 150, 150, 10),
+                new Rectangle(600, 50, 50, 50),
+                new Rectangle(0, 350, 800, 100)
+            };
 
-            //---------- getPartImages ----------
-            List<Mat> partImages = OcrUtils.GetPartImages(src, textBoxes);
+
+            //List<TextBlock> filteredBlocks = new List<TextBlock>();
+            List<TextBox> filteredTextBoxes = new List<TextBox>();
+
+            foreach (var box in textBoxes)
+            {
+                if (box.Points == null || box.Points.Count == 0)
+                {
+                    Console.WriteLine("Skipping box: no points.");
+                    continue;
+                }
+
+                Rectangle boxRect = OcrUtils.GetBoundingBox(box.Points);
+
+                if (boxRect.Width <= 0 || boxRect.Height <= 0)
+                {
+                    Console.WriteLine("Skipping box: invalid bounding box.");
+                    continue;
+                }
+
+                bool intersectsAnyROI = roiRects.Exists(roi => roi.IntersectsWith(Rectangle.Round(boxRect)));
+
+                if (intersectsAnyROI)
+                {
+                    filteredTextBoxes.Add(box);
+                    Console.WriteLine($"Box added: {boxRect}");
+                }
+                else
+                {
+                    Console.WriteLine($"Box skipped (no ROI match): {boxRect}");
+                }
+            }
+
+            // 3. 이후 과정은 필터링된 박스 기준으로만 수행!
+            List<Mat> partImages = OcrUtils.GetPartImages(src, filteredTextBoxes);
+
             if (isPartImg)
             {
                 for (int i = 0; i < partImages.Count; i++)
@@ -91,61 +127,58 @@ namespace OcrLiteLib
                 }
             }
 
-            Console.WriteLine("---------- step: angleNet getAngles ----------");
             List<Angle> angles = angleNet.GetAngles(partImages, doAngle, mostAngle);
-            //angles.ForEach(x => Console.WriteLine(x));
 
-            //Rotate partImgs
+            // 180도 회전 및 디버그 이미지 출력
             for (int i = 0; i < partImages.Count; ++i)
             {
                 if (angles[i].Index == 1)
                 {
                     partImages[i] = OcrUtils.MatRotateClockWise180(partImages[i]);
                 }
+
                 if (isDebugImg)
                 {
                     CvInvoke.Imshow($"DebugImg({i})", partImages[i]);
                 }
             }
 
-            Console.WriteLine("---------- step: crnnNet getTextLines ----------");
             List<TextLine> textLines = crnnNet.GetTextLines(partImages);
-            //textLines.ForEach(x => Console.WriteLine(x));
 
+            // 최종 결과 조합
             List<TextBlock> textBlocks = new List<TextBlock>();
+
             for (int i = 0; i < textLines.Count; ++i)
             {
-                TextBlock textBlock = new TextBlock();
-                textBlock.BoxPoints = textBoxes[i].Points;
-                textBlock.BoxScore = textBoxes[i].Score;
-                textBlock.AngleIndex = angles[i].Index;
-                textBlock.AngleScore = angles[i].Score;
-                textBlock.AngleTime = angles[i].Time;
-                textBlock.Text = textLines[i].Text;
-                textBlock.CharScores = textLines[i].CharScores;
-                textBlock.CrnnTime = textLines[i].Time;
-                textBlock.BlockTime = angles[i].Time + textLines[i].Time;
+                TextBlock textBlock = new TextBlock
+                {
+                    BoxPoints = filteredTextBoxes[i].Points,
+                    BoxScore = filteredTextBoxes[i].Score,
+                    AngleIndex = angles[i].Index,
+                    AngleScore = angles[i].Score,
+                    AngleTime = angles[i].Time,
+                    Text = textLines[i].Text,
+                    CharScores = textLines[i].CharScores,
+                    CrnnTime = textLines[i].Time,
+                    BlockTime = angles[i].Time + textLines[i].Time
+                };
+
                 textBlocks.Add(textBlock);
             }
-            //textBlocks.ForEach(x => Console.WriteLine(x));
 
-            var endTicks = DateTime.Now.Ticks;
-            var fullDetectTime = (endTicks - startTicks) / 10000F;
-            //Console.WriteLine($"fullDetectTime({fullDetectTime}ms)");
+            // 박스 시각화도 ROI 필터링된 것만 그린다!
+            OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredTextBoxes, thickness);
 
-            //cropped to original size
-            Mat boxImg = new Mat(textBoxPaddingImg, originRect);
+            // 결과 반환
+            OcrResult ocrResult = new OcrResult
+            {
+                TextBlocks = textBlocks,
+                DbNetTime = dbNetTime,
+                BoxImg = new Mat(textBoxPaddingImg, originRect),
+                StrRes = string.Join(Environment.NewLine, textBlocks.ConvertAll(tb => tb.Text))
+            };
 
-            StringBuilder strRes = new StringBuilder();
-            textBlocks.ForEach(x => strRes.AppendLine(x.Text));
-
-            OcrResult ocrResult = new OcrResult();
-            ocrResult.TextBlocks = textBlocks;
-            ocrResult.DbNetTime = dbNetTime;
-            ocrResult.BoxImg = boxImg;
-            ocrResult.DetectTime = fullDetectTime;
-            ocrResult.StrRes = strRes.ToString();
-
+            Console.WriteLine(ocrResult);
             return ocrResult;
         }
 
