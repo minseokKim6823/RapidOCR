@@ -89,7 +89,7 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.ColumnCount = 3;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
@@ -126,7 +126,7 @@
             // 
             // modelsTextBox
             // 
-            this.modelsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.modelsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.modelsTextBox.Location = new System.Drawing.Point(103, 3);
             this.modelsTextBox.Name = "modelsTextBox";
@@ -154,7 +154,7 @@
             // 
             // pathTextBox
             // 
-            this.pathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pathTextBox.Location = new System.Drawing.Point(103, 183);
             this.pathTextBox.Name = "pathTextBox";
@@ -182,7 +182,7 @@
             // 
             // numThreadNumeric
             // 
-            this.numThreadNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.numThreadNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numThreadNumeric.Location = new System.Drawing.Point(103, 153);
             this.numThreadNumeric.Maximum = new decimal(new int[] {
@@ -219,7 +219,7 @@
             this.detNameTextBox.Name = "detNameTextBox";
             this.detNameTextBox.Size = new System.Drawing.Size(489, 21);
             this.detNameTextBox.TabIndex = 12;
-            this.detNameTextBox.Text = "ch_PP-OCRv3_det_infer.onnx";
+            this.detNameTextBox.Text = "en_PP-OCRv3_det_infer.onnx";
             // 
             // label10
             // 
@@ -236,7 +236,7 @@
             this.clsNameTextBox.Name = "clsNameTextBox";
             this.clsNameTextBox.Size = new System.Drawing.Size(489, 21);
             this.clsNameTextBox.TabIndex = 14;
-            this.clsNameTextBox.Text = "ch_ppocr_mobile_v2.0_cls_infer.onnx";
+            this.clsNameTextBox.Text = "ch_PP-OCRv3_cls_infer.onnx";
             // 
             // label11
             // 
@@ -253,7 +253,7 @@
             this.recNameTextBox.Name = "recNameTextBox";
             this.recNameTextBox.Size = new System.Drawing.Size(489, 21);
             this.recNameTextBox.TabIndex = 16;
-            this.recNameTextBox.Text = "ch_PP-OCRv3_rec_infer.onnx";
+            this.recNameTextBox.Text = "en_PP-OCRv3_rec_infer.onnx";
             // 
             // label12
             // 
@@ -459,7 +459,7 @@
             // 
             // tableLayoutPanel3
             // 
-            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tableLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel3.ColumnCount = 3;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 170F));
@@ -477,7 +477,7 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox.Location = new System.Drawing.Point(173, 3);
@@ -489,7 +489,7 @@
             // 
             // strRestTextBox
             // 
-            this.strRestTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.strRestTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.strRestTextBox.Location = new System.Drawing.Point(466, 3);
             this.strRestTextBox.Multiline = true;
@@ -577,8 +577,8 @@
             // 
             // ocrResultTextBox
             // 
-            this.ocrResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.ocrResultTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ocrResultTextBox.Font = new System.Drawing.Font("宋体", 9F);
             this.ocrResultTextBox.Location = new System.Drawing.Point(14, 503);
