@@ -253,7 +253,7 @@
             this.recNameTextBox.Name = "recNameTextBox";
             this.recNameTextBox.Size = new System.Drawing.Size(489, 21);
             this.recNameTextBox.TabIndex = 16;
-            this.recNameTextBox.Text = "en_PP-OCRv3_rec_infer.onnx";
+            this.recNameTextBox.Text = "num_rec_250312.onnx";
             // 
             // label12
             // 
@@ -270,7 +270,7 @@
             this.keysNameTextBox.Name = "keysNameTextBox";
             this.keysNameTextBox.Size = new System.Drawing.Size(489, 21);
             this.keysNameTextBox.TabIndex = 18;
-            this.keysNameTextBox.Text = "ppocr_keys_v1.txt";
+            this.keysNameTextBox.Text = "num_dict.txt";
             // 
             // label5
             // 
