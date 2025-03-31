@@ -30,18 +30,12 @@ namespace BaiPiaoOcrOnnxCs
             string modelsDir = appPath + "models";
             modelsTextBox.Text = modelsDir;
             string detPath = modelsDir + "\\" + detNameTextBox.Text;
-            string clsPath = modelsDir + "\\" + clsNameTextBox.Text;
             string recPath = modelsDir + "\\" + recNameTextBox.Text;
             string keysPath = modelsDir + "\\" + keysNameTextBox.Text;
             bool isDetExists = File.Exists(detPath);
             if (!isDetExists)
             {
                 MessageBox.Show("模型文件不存在:" + detPath);
-            }
-            bool isClsExists = File.Exists(clsPath);
-            if (!isClsExists)
-            {
-                MessageBox.Show("模型文件不存在:" + clsPath);
             }
             bool isRecExists = File.Exists(recPath);
             if (!isRecExists)
@@ -53,10 +47,10 @@ namespace BaiPiaoOcrOnnxCs
             {
                 MessageBox.Show("Keys文件不存在:" + keysPath);
             }
-            if (isDetExists && isClsExists && isRecExists && isKeysExists)
+            if (isDetExists && isRecExists && isKeysExists)
             {
                 ocrEngin = new OcrLite();
-                ocrEngin.InitModels(detPath, clsPath, recPath, keysPath, (int)numThreadNumeric.Value);
+                ocrEngin.InitModels(detPath, recPath, keysPath, (int)numThreadNumeric.Value);
             }
             else
             {
@@ -68,18 +62,12 @@ namespace BaiPiaoOcrOnnxCs
         {
             string modelsDir = modelsTextBox.Text;
             string detPath = modelsDir + "\\" + detNameTextBox.Text;
-            string clsPath = modelsDir + "\\" + clsNameTextBox.Text;
             string recPath = modelsDir + "\\" + recNameTextBox.Text;
             string keysPath = modelsDir + "\\" + keysNameTextBox.Text;
             bool isDetExists = File.Exists(detPath);
             if (!isDetExists)
             {
                 MessageBox.Show("模型文件不存在:" + detPath);
-            }
-            bool isClsExists = File.Exists(clsPath);
-            if (!isClsExists)
-            {
-                MessageBox.Show("模型文件不存在:" + clsPath);
             }
             bool isRecExists = File.Exists(recPath);
             if (!isRecExists)
@@ -91,10 +79,10 @@ namespace BaiPiaoOcrOnnxCs
             {
                 MessageBox.Show("Keys文件不存在:" + keysPath);
             }
-            if (isDetExists && isClsExists && isRecExists && isKeysExists)
+            if (isDetExists  && isRecExists && isKeysExists)
             {
                 ocrEngin = new OcrLite();
-                ocrEngin.InitModels(detPath, clsPath, recPath, keysPath, (int)numThreadNumeric.Value);
+                ocrEngin.InitModels(detPath, recPath, keysPath, (int)numThreadNumeric.Value);
             }
             else
             {
