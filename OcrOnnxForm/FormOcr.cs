@@ -2,14 +2,8 @@
 using Emgu.CV.CvEnum;
 using OcrLiteLib;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace BaiPiaoOcrOnnxCs
@@ -26,63 +20,46 @@ namespace BaiPiaoOcrOnnxCs
         private void Form1_Load(object sender, EventArgs e)
         {
             string appPath = AppDomain.CurrentDomain.BaseDirectory;
-            string appDir = Directory.GetParent(appPath).FullName;
-            string modelsDir = appPath + "models";
-            modelsTextBox.Text = modelsDir;
-            string detPath = modelsDir + "\\" + detNameTextBox.Text;
-            string recPath = modelsDir + "\\" + recNameTextBox.Text;
-            string keysPath = modelsDir + "\\" + keysNameTextBox.Text;
-            bool isDetExists = File.Exists(detPath);
-            if (!isDetExists)
-            {
-                MessageBox.Show("模型文件不存在:" + detPath);
-            }
-            bool isRecExists = File.Exists(recPath);
-            if (!isRecExists)
-            {
-                MessageBox.Show("模型文件不存在:" + recPath);
-            }
-            bool isKeysExists = File.Exists(recPath);
-            if (!isKeysExists)
-            {
-                MessageBox.Show("Keys文件不存在:" + keysPath);
-            }
-            if (isDetExists && isRecExists && isKeysExists)
-            {
-                ocrEngin = new OcrLite();
-                ocrEngin.InitModels(detPath, recPath, keysPath, (int)numThreadNumeric.Value);
-            }
-            else
-            {
-                MessageBox.Show("初始化失败，请确认模型文件夹和文件后，重新初始化！");
-            }
+            modelsTextBox.Text = Path.Combine(appPath, "models");
         }
 
         private void initBtn_Click(object sender, EventArgs e)
         {
             string modelsDir = modelsTextBox.Text;
             string detPath = modelsDir + "\\" + detNameTextBox.Text;
-            string recPath = modelsDir + "\\" + recNameTextBox.Text;
-            string keysPath = modelsDir + "\\" + keysNameTextBox.Text;
+            string rec1Path = modelsDir + "\\" + recNameTextBox.Text;
+            string rec2Path = @"C:\Users\Public\micr_dataset\micr_rec_250313.onnx";
+            string keys1Path = modelsDir + "\\" + keysNameTextBox.Text;
+            string keys2Path = @"C:\Users\Public\micr_dataset\micr_dict.txt";
             bool isDetExists = File.Exists(detPath);
             if (!isDetExists)
             {
                 MessageBox.Show("模型文件不存在:" + detPath);
             }
-            bool isRecExists = File.Exists(recPath);
-            if (!isRecExists)
+            bool isRec1Exists = File.Exists(rec1Path);
+            if (!isRec1Exists)
             {
-                MessageBox.Show("模型文件不存在:" + recPath);
+                MessageBox.Show("模型文件不存在:" + rec1Path);
             }
-            bool isKeysExists = File.Exists(recPath);
-            if (!isKeysExists)
+            bool isRec2Exists = File.Exists(rec2Path);
+            if (!isRec2Exists)
             {
-                MessageBox.Show("Keys文件不存在:" + keysPath);
+                MessageBox.Show("模型文件不存在:" + rec2Path);
             }
-            if (isDetExists  && isRecExists && isKeysExists)
+            bool isKeys1Exists = File.Exists(keys1Path);
+            if (!isKeys1Exists)
+            {
+                MessageBox.Show("Keys文件不存在:" + keys1Path);
+            }
+            bool isKeys2Exists = File.Exists(keys2Path);
+            if (!isKeys2Exists)
+            {
+                MessageBox.Show("Keys文件不存在:" + keys2Path);
+            }
+            if (isDetExists  && isRec1Exists && isRec2Exists && isKeys1Exists && isKeys2Exists)
             {
                 ocrEngin = new OcrLite();
-                ocrEngin.InitModels(detPath, recPath, keysPath, (int)numThreadNumeric.Value);
+                ocrEngin.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path,(int)numThreadNumeric.Value);
             }
             else
             {
@@ -151,6 +128,15 @@ namespace BaiPiaoOcrOnnxCs
         private void debugCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             ocrEngin.isDebugImg = debugCheckBox.Checked;
+        }
+        private void modelsTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel2_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

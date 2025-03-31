@@ -109,7 +109,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label12, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.keysNameTextBox, 1, 4);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(19, 15);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 7;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
@@ -121,16 +121,18 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(900, 264);
             this.tableLayoutPanel2.TabIndex = 14;
+            this.tableLayoutPanel2.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel2_Paint);
             // 
             // modelsTextBox
             // 
             this.modelsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.modelsTextBox.Location = new System.Drawing.Point(137, 4);
-            this.modelsTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.modelsTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.modelsTextBox.Name = "modelsTextBox";
             this.modelsTextBox.Size = new System.Drawing.Size(652, 25);
             this.modelsTextBox.TabIndex = 1;
+            this.modelsTextBox.TextChanged += new System.EventHandler(this.modelsTextBox_TextChanged);
             // 
             // label9
             // 
@@ -145,7 +147,7 @@
             // modelsBtn
             // 
             this.modelsBtn.Location = new System.Drawing.Point(797, 4);
-            this.modelsBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.modelsBtn.Margin = new System.Windows.Forms.Padding(4);
             this.modelsBtn.Name = "modelsBtn";
             this.modelsBtn.Size = new System.Drawing.Size(99, 29);
             this.modelsBtn.TabIndex = 2;
@@ -158,7 +160,7 @@
             this.pathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pathTextBox.Location = new System.Drawing.Point(137, 232);
-            this.pathTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pathTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(652, 25);
             this.pathTextBox.TabIndex = 6;
@@ -166,7 +168,7 @@
             // openBtn
             // 
             this.openBtn.Location = new System.Drawing.Point(797, 232);
-            this.openBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.openBtn.Margin = new System.Windows.Forms.Padding(4);
             this.openBtn.Name = "openBtn";
             this.openBtn.Size = new System.Drawing.Size(99, 29);
             this.openBtn.TabIndex = 0;
@@ -189,7 +191,7 @@
             this.numThreadNumeric.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.numThreadNumeric.Location = new System.Drawing.Point(137, 194);
-            this.numThreadNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.numThreadNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.numThreadNumeric.Maximum = new decimal(new int[] {
             128,
             0,
@@ -222,7 +224,7 @@
             // detNameTextBox
             // 
             this.detNameTextBox.Location = new System.Drawing.Point(137, 42);
-            this.detNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.detNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.detNameTextBox.Name = "detNameTextBox";
             this.detNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.detNameTextBox.TabIndex = 12;
@@ -241,7 +243,7 @@
             // recNameTextBox
             // 
             this.recNameTextBox.Location = new System.Drawing.Point(137, 118);
-            this.recNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.recNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.recNameTextBox.Name = "recNameTextBox";
             this.recNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.recNameTextBox.TabIndex = 16;
@@ -260,7 +262,7 @@
             // keysNameTextBox
             // 
             this.keysNameTextBox.Location = new System.Drawing.Point(137, 156);
-            this.keysNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.keysNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.keysNameTextBox.Name = "keysNameTextBox";
             this.keysNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.keysNameTextBox.TabIndex = 18;
@@ -285,7 +287,7 @@
             0,
             65536});
             this.boxThreshNumeric.Location = new System.Drawing.Point(115, 126);
-            this.boxThreshNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.boxThreshNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.boxThreshNumeric.Maximum = new decimal(new int[] {
             1,
             0,
@@ -324,7 +326,7 @@
             0,
             65536});
             this.unClipRatioNumeric.Location = new System.Drawing.Point(115, 166);
-            this.unClipRatioNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.unClipRatioNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.unClipRatioNumeric.Maximum = new decimal(new int[] {
             10,
             0,
@@ -350,7 +352,7 @@
             this.doAngleCheckBox.Checked = true;
             this.doAngleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.doAngleCheckBox.Location = new System.Drawing.Point(6, 206);
-            this.doAngleCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.doAngleCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.doAngleCheckBox.Name = "doAngleCheckBox";
             this.doAngleCheckBox.Size = new System.Drawing.Size(82, 19);
             this.doAngleCheckBox.TabIndex = 26;
@@ -361,7 +363,7 @@
             // 
             this.mostAngleCheckBox.AutoSize = true;
             this.mostAngleCheckBox.Location = new System.Drawing.Point(115, 206);
-            this.mostAngleCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mostAngleCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.mostAngleCheckBox.Name = "mostAngleCheckBox";
             this.mostAngleCheckBox.Size = new System.Drawing.Size(97, 19);
             this.mostAngleCheckBox.TabIndex = 27;
@@ -381,7 +383,7 @@
             // imgResizeNumeric
             // 
             this.imgResizeNumeric.Location = new System.Drawing.Point(115, 46);
-            this.imgResizeNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.imgResizeNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.imgResizeNumeric.Maximum = new decimal(new int[] {
             99999,
             0,
@@ -409,7 +411,7 @@
             // paddingNumeric
             // 
             this.paddingNumeric.Location = new System.Drawing.Point(115, 6);
-            this.paddingNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.paddingNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.paddingNumeric.Maximum = new decimal(new int[] {
             200,
             0,
@@ -443,7 +445,7 @@
             0,
             65536});
             this.boxScoreThreshNumeric.Location = new System.Drawing.Point(115, 86);
-            this.boxScoreThreshNumeric.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.boxScoreThreshNumeric.Margin = new System.Windows.Forms.Padding(4);
             this.boxScoreThreshNumeric.Maximum = new decimal(new int[] {
             1,
             0,
@@ -475,7 +477,7 @@
             this.tableLayoutPanel3.Controls.Add(this.strRestTextBox, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.tableLayoutPanel1, 0, 0);
             this.tableLayoutPanel3.Location = new System.Drawing.Point(19, 286);
-            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -488,7 +490,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox.Location = new System.Drawing.Point(231, 4);
-            this.pictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(383, 324);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -500,7 +502,7 @@
             this.strRestTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.strRestTextBox.Location = new System.Drawing.Point(622, 4);
-            this.strRestTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.strRestTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.strRestTextBox.Multiline = true;
             this.strRestTextBox.Name = "strRestTextBox";
             this.strRestTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -512,7 +514,7 @@
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Outset;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 135F));
             this.tableLayoutPanel1.Controls.Add(this.boxScoreThreshNumeric, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.imgResizeNumeric, 1, 1);
@@ -528,7 +530,7 @@
             this.tableLayoutPanel1.Controls.Add(this.partImgCheckBox, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.debugCheckBox, 1, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
@@ -546,7 +548,7 @@
             // 
             this.partImgCheckBox.AutoSize = true;
             this.partImgCheckBox.Location = new System.Drawing.Point(6, 246);
-            this.partImgCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.partImgCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.partImgCheckBox.Name = "partImgCheckBox";
             this.partImgCheckBox.Size = new System.Drawing.Size(77, 19);
             this.partImgCheckBox.TabIndex = 28;
@@ -558,7 +560,7 @@
             // 
             this.debugCheckBox.AutoSize = true;
             this.debugCheckBox.Location = new System.Drawing.Point(115, 246);
-            this.debugCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.debugCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.debugCheckBox.Name = "debugCheckBox";
             this.debugCheckBox.Size = new System.Drawing.Size(93, 19);
             this.debugCheckBox.TabIndex = 29;
@@ -570,7 +572,7 @@
             // 
             this.detectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.detectBtn.Location = new System.Drawing.Point(929, 15);
-            this.detectBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.detectBtn.Margin = new System.Windows.Forms.Padding(4);
             this.detectBtn.Name = "detectBtn";
             this.detectBtn.Size = new System.Drawing.Size(99, 142);
             this.detectBtn.TabIndex = 12;
@@ -581,7 +583,7 @@
             // initBtn
             // 
             this.initBtn.Location = new System.Drawing.Point(929, 165);
-            this.initBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.initBtn.Margin = new System.Windows.Forms.Padding(4);
             this.initBtn.Name = "initBtn";
             this.initBtn.Size = new System.Drawing.Size(99, 114);
             this.initBtn.TabIndex = 15;
@@ -596,7 +598,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ocrResultTextBox.Font = new System.Drawing.Font("SimSun", 9F);
             this.ocrResultTextBox.Location = new System.Drawing.Point(19, 629);
-            this.ocrResultTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ocrResultTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.ocrResultTextBox.Multiline = true;
             this.ocrResultTextBox.Name = "ocrResultTextBox";
             this.ocrResultTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -613,7 +615,7 @@
             this.Controls.Add(this.detectBtn);
             this.Controls.Add(this.initBtn);
             this.Controls.Add(this.ocrResultTextBox);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormOcr";
             this.Text = "RapidOcrOnnxCs v1.2.0";
             this.Load += new System.EventHandler(this.Form1_Load);

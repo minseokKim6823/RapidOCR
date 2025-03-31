@@ -172,7 +172,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AngleNet.cs" />
     <Compile Include="CrnnNet.cs" />
     <Compile Include="DbNet.cs" />
     <Compile Include="OcrLite.cs" />

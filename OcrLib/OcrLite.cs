@@ -22,12 +22,13 @@ namespace OcrLiteLib
             crnnNet = new CrnnNet();
         }
 
-        public void InitModels(string detPath, string recPath, string keysPath, int numThread)
+        public void InitModels(string detPath, string rec1Path, string rec2Path, string keys1Path, string keys2Path, int numThread)
         {
             try
             {
                 dbNet.InitModel(detPath, numThread);
-                crnnNet.InitModel(recPath, keysPath, numThread);
+                crnnNet.InitModel(rec1Path, keys1Path, numThread);
+                crnnNet.InitModel(rec2Path, keys2Path, numThread);
             }
             catch (Exception ex)
             {

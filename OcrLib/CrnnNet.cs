@@ -77,7 +77,7 @@ namespace OcrLiteLib
             return textLines;
         }
 
-        private TextLine GetTextLine(Mat src)
+        public TextLine GetTextLine(Mat src)
         {
             TextLine textLine = new TextLine();
 
