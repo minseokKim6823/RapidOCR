@@ -94,7 +94,7 @@ namespace BaiPiaoOcrOnnxCs
                 }
             }
         }
-        Mat targetImg;
+        object targetImg;
 
 
         private void detectBtn_Click(object sender, EventArgs e)
@@ -112,7 +112,7 @@ namespace BaiPiaoOcrOnnxCs
             float unClipRatio = (float)unClipRatioNumeric.Value;
             bool doAngle = doAngleCheckBox.Checked;
             bool mostAngle = mostAngleCheckBox.Checked;
-            OcrResult ocrResult = ocrEngin.Detect(targetImg, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio);
+            OcrResult ocrResult = ocrEngin.DetectNumber(targetImg, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio);
             ocrResultTextBox.Text = ocrResult.ToString();
             strRestTextBox.Text = ocrResult.StrRes;
             pictureBox.Image = ocrResult.BoxImg.ToBitmap();

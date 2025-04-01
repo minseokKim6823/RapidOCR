@@ -39,78 +39,152 @@ namespace OcrLiteLib
             }
         }
 
-        public OcrResult Detect(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
-            int originMaxSide = Math.Max(img.Cols, img.Rows);
+        public OcrResult DetectFilter(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
+
+            Mat src;
+
+            if(img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
 
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
-            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
             return DetectOnce1(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
         }
         
-        public OcrResult DetectNess(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
-            int originMaxSide = Math.Max(img.Cols, img.Rows);
+        public OcrResult DetectCrop(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
 
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
-            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
             return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
         }
 
-        public OcrResult DetectMask(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        public OcrResult DetectMask(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
         {
-            int originMaxSide = Math.Max(img.Cols, img.Rows);
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
 
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
-            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
             return DetectOnce3(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
         }
 
-        public OcrResult DetectOrigin(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        public OcrResult DetectNumber(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
         {
-            int originMaxSide = Math.Max(img.Cols, img.Rows);
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
 
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
-            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+        }
+        public OcrResult DetectMICR(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        {
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
             return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
         }
 
-        public OcrResult DetectIndividual(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
-        {
-            int originMaxSide = Math.Max(img.Cols, img.Rows);
-
-            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
-            resize += 2 * padding;
-
-            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
-
-            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
-
-            return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
-        }
 
         private OcrResult DetectOnce1(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh,float unClipRatio){
             Mat textBoxPaddingImg = src.Clone();
@@ -470,7 +544,7 @@ namespace OcrLiteLib
             };
         }
 
-        private OcrResult DetectOnce4(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio)
+        private OcrResult DetectOnce4(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio, bool useCrnnNet2 = false)
         {
             Mat textBoxPaddingImg = src.Clone();
             int thickness = OcrUtils.GetThickness(src);
@@ -510,7 +584,11 @@ namespace OcrLiteLib
             List<TextLine> textLines = new List<TextLine>();
             foreach (var part in partImages)
             {
-                textLines.Add(crnnNet1.GetTextLine(part));
+                if (useCrnnNet2)
+                    textLines.Add(crnnNet2.GetTextLine(part)); // MICR 모드
+                else
+                    textLines.Add(crnnNet1.GetTextLine(part)); // 기본
+
             }
 
             // 5. 결과 조합
