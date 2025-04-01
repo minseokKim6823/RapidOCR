@@ -39,19 +39,77 @@ namespace OcrLiteLib
             }
         }
 
-        public OcrResult Detect(string img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
-            Mat originSrc = CvInvoke.Imread(img, ImreadModes.Color);//default : BGR
-            int originMaxSide = Math.Max(originSrc.Cols, originSrc.Rows);
+        public OcrResult Detect(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
+            int originMaxSide = Math.Max(img.Cols, img.Rows);
 
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
-            Rectangle paddingRect = new Rectangle(padding, padding, originSrc.Cols, originSrc.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(originSrc, padding);
+            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce1(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+        }
+        
+        public OcrResult DetectNess(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
+            int originMaxSide = Math.Max(img.Cols, img.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+        }
+
+        public OcrResult DetectMask(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        {
+            int originMaxSide = Math.Max(img.Cols, img.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
             return DetectOnce3(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+        }
+
+        public OcrResult DetectOrigin(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        {
+            int originMaxSide = Math.Max(img.Cols, img.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+        }
+
+        public OcrResult DetectIndividual(Mat img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        {
+            int originMaxSide = Math.Max(img.Cols, img.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, img.Cols, img.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(img, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
         }
 
         private OcrResult DetectOnce1(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh,float unClipRatio){

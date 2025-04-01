@@ -25,6 +25,7 @@ namespace BaiPiaoOcrOnnxCs
 
         private void initBtn_Click(object sender, EventArgs e)
         {
+
             string modelsDir = modelsTextBox.Text;
             string detPath = modelsDir + "\\" + detNameTextBox.Text;
             string rec1Path = modelsDir + "\\" + recNameTextBox.Text;
@@ -93,6 +94,8 @@ namespace BaiPiaoOcrOnnxCs
                 }
             }
         }
+        Mat targetImg;
+
 
         private void detectBtn_Click(object sender, EventArgs e)
         {
@@ -101,12 +104,7 @@ namespace BaiPiaoOcrOnnxCs
                 MessageBox.Show("未初始化，无法执行!");
                 return;
             }
-            string targetImg = pathTextBox.Text;
-            if (!File.Exists(targetImg))
-            {
-                MessageBox.Show("目标图片不存在，请用Open按钮打开");
-                return;
-            }
+            
             int padding = (int)paddingNumeric.Value;
             int imgResize = (int)imgResizeNumeric.Value;
             float boxScoreThresh = (float)boxScoreThreshNumeric.Value;
@@ -114,7 +112,7 @@ namespace BaiPiaoOcrOnnxCs
             float unClipRatio = (float)unClipRatioNumeric.Value;
             bool doAngle = doAngleCheckBox.Checked;
             bool mostAngle = mostAngleCheckBox.Checked;
-            OcrResult ocrResult = ocrEngin.Detect(pathTextBox.Text, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio);
+            OcrResult ocrResult = ocrEngin.Detect(targetImg, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio);
             ocrResultTextBox.Text = ocrResult.ToString();
             strRestTextBox.Text = ocrResult.StrRes;
             pictureBox.Image = ocrResult.BoxImg.ToBitmap();
