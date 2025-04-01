@@ -114,7 +114,7 @@ namespace BaiPiaoOcrOnnxCs
             float unClipRatio = (float)unClipRatioNumeric.Value;
             bool doAngle = doAngleCheckBox.Checked;
             bool mostAngle = mostAngleCheckBox.Checked;
-            OcrResult ocrResult = ocrEngin.Detect(pathTextBox.Text, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio, doAngle, mostAngle);
+            OcrResult ocrResult = ocrEngin.Detect(pathTextBox.Text, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio);
             ocrResultTextBox.Text = ocrResult.ToString();
             strRestTextBox.Text = ocrResult.StrRes;
             pictureBox.Image = ocrResult.BoxImg.ToBitmap();

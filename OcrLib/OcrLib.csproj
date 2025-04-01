@@ -175,6 +175,7 @@
     <Compile Include="CrnnNet.cs" />
     <Compile Include="DbNet.cs" />
     <Compile Include="OcrLite.cs" />
+    <Compile Include="OcrLite2.cs" />
     <Compile Include="OcrResult.cs" />
     <Compile Include="OcrUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
