@@ -161,7 +161,7 @@ namespace BaiPiaoOcrOnnxCs
             float boxScoreThresh = (float)boxScoreThreshNumeric.Value;
             float boxThresh = (float)boxThreshNumeric.Value;
             float unClipRatio = (float)unClipRatioNumeric.Value;
-            OcrResult ocrResult = ocrEngin.DetectMask (targetImg, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio ,roiRatios);
+            OcrResult ocrResult = ocrEngin.DetectMask(targetImg, padding, imgResize, boxScoreThresh, boxThresh, unClipRatio ,roiRatios);
             ocrResultTextBox.Text = ocrResult.ToString();
             strRestTextBox.Text = ocrResult.StrRes;
             pictureBox.Image = ocrResult.BoxImg.ToBitmap();

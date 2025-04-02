@@ -79,10 +79,32 @@ namespace OcrLiteLib
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("OcrResult");
-            TextBlocks.ForEach(x => sb.Append(x));
+
+            // 1. 모델별 블록 분리
+            var numBlocks = TextBlocks.FindAll(tb => tb.ModelType == "NUM");
+            var micrBlocks = TextBlocks.FindAll(tb => tb.ModelType == "MICR");
+
+            if (numBlocks.Count > 0)
+            {
+                sb.AppendLine("├─[NUM 모델 결과]");
+                numBlocks.ForEach(x => sb.Append(x));
+            }
+
+            if (micrBlocks.Count > 0)
+            {
+                sb.AppendLine("├─[MICR 모델 결과]");
+                micrBlocks.ForEach(x => sb.Append(x));
+            }
+
+            // 2. 타이밍 정보
             sb.AppendLine($"├─DbNetTime({DbNetTime}ms)");
             sb.AppendLine($"├─DetectTime({DetectTime}ms)");
-            sb.AppendLine($"└─StrRes({StrRes})");
+
+            // 3. 최종 문자열 결과
+            sb.AppendLine("└─StrRes(");
+            sb.AppendLine(StrRes);
+            sb.AppendLine(")");
+
             return sb.ToString();
         }
 
