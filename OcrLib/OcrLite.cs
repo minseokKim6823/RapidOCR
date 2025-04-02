@@ -13,6 +13,7 @@ namespace OcrLiteLib
         public bool isPartImg { get; set; }
         public bool isDebugImg { get; set; }
 
+        private int padding = 0;
         private DbNet dbNet;
         private CrnnNet crnnNet1;
         private CrnnNet crnnNet2;
@@ -39,7 +40,8 @@ namespace OcrLiteLib
             }
         }
 
-        public OcrResult DetectFilter(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
+        public OcrResult DetectFilter(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
+        {
 
             Mat src;
 
@@ -66,96 +68,10 @@ namespace OcrLiteLib
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
-            return DetectOnce1(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+            return DetectOnce1(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio, roiRatios);
         }
         
-        public OcrResult DetectCrop(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio){
-            Mat src;
-
-            if (img is string path)
-            {
-                src = CvInvoke.Imread(path, ImreadModes.Color);
-            }
-            else if (img is Mat mat)
-            {
-                src = mat;
-            }
-            else
-            {
-                throw new ArgumentException("img는 string or Mat");
-            }
-
-            int originMaxSide = Math.Max(src.Cols, src.Rows);
-
-            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
-            resize += 2 * padding;
-
-            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
-
-            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
-
-            return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
-        }
-
-        public OcrResult DetectMask(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
-        {
-            Mat src;
-
-            if (img is string path)
-            {
-                src = CvInvoke.Imread(path, ImreadModes.Color);
-            }
-            else if (img is Mat mat)
-            {
-                src = mat;
-            }
-            else
-            {
-                throw new ArgumentException("img는 string or Mat");
-            }
-            int originMaxSide = Math.Max(src.Cols, src.Rows);
-
-            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
-            resize += 2 * padding;
-
-            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
-
-            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
-
-            return DetectOnce3(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
-        }
-
-        public OcrResult DetectNumber(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
-        {
-            Mat src;
-
-            if (img is string path)
-            {
-                src = CvInvoke.Imread(path, ImreadModes.Color);
-            }
-            else if (img is Mat mat)
-            {
-                src = mat;
-            }
-            else
-            {
-                throw new ArgumentException("img는 string or Mat");
-            }
-            int originMaxSide = Math.Max(src.Cols, src.Rows);
-
-            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
-            resize += 2 * padding;
-
-            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
-            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
-
-            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
-
-            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
-        }
-        public OcrResult DetectMICR(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio)
+        public OcrResult DetectCrop(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
         {
             Mat src;
 
@@ -182,11 +98,101 @@ namespace OcrLiteLib
 
             ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
 
-            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio);
+            return DetectOnce2(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio, roiRatios);
+        }
+
+        public OcrResult DetectMask(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
+        {
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
+
+            Console.WriteLine(src.Width);
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce3(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio, roiRatios);
+        }
+
+        public OcrResult DetectNumber(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh,float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
+        {
+            Mat src;
+
+            
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio, roiRatios, false);
+        }
+        public OcrResult DetectMICR(object img, int padding, int maxSideLen, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
+        {
+            Mat src;
+
+            if (img is string path)
+            {
+                src = CvInvoke.Imread(path, ImreadModes.Color);
+            }
+            else if (img is Mat mat)
+            {
+                src = mat;
+            }
+            else
+            {
+                throw new ArgumentException("img는 string or Mat");
+            }
+
+            int originMaxSide = Math.Max(src.Cols, src.Rows);
+
+            int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
+            resize += 2 * padding;
+
+            Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
+            Mat paddingSrc = OcrUtils.MakePadding(src, padding);
+
+            ScaleParam scale = ScaleParam.GetScaleParam(paddingSrc, resize);
+
+            return DetectOnce4(paddingSrc, paddingRect, scale, boxScoreThresh, boxThresh, unClipRatio, roiRatios, true);
         }
 
 
-        private OcrResult DetectOnce1(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh,float unClipRatio){
+
+        private OcrResult DetectOnce1(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh,float unClipRatio, List<(float x, float y, float width, float height)> roiRatios){
             Mat textBoxPaddingImg = src.Clone();
             int thickness = OcrUtils.GetThickness(src);
 
@@ -202,12 +208,12 @@ namespace OcrLiteLib
             var dbNetTime = (DateTime.Now.Ticks - startTicks) / 10000F; //탐색 속도
 
             // 1. ROI 영역 비율 정의
-            List<(float x, float y, float width, float height)> roiRatios = new List<(float, float, float, float)>
-            {
-                (0.76f, 0.25f, 0, 0.03f), // 일련번호 인식
-                (0, 0.35f, 0.5f, 0),//금액 인식
-                (0, 0.75f, 1, 0.5f )//아래
-            };
+            //List<(float x, float y, float width, float height)> roiRatios = new List<(float, float, float, float)>
+            //{
+            //    (0.76f, 0.25f, 0, 0.03f), // 일련번호 인식
+            //    (0, 0.35f, 0.5f, 0),//금액 인식
+            //    (0, 0.75f, 1, 0.5f )//아래
+            //};
 
             // 2. 비율을 기준으로 실제 Rectangle 생성
             List<Rectangle> roiRects = new List<Rectangle>();
@@ -216,8 +222,6 @@ namespace OcrLiteLib
             Console.WriteLine($"imgWidth : {imgWidth}");
             Console.WriteLine($"imgHeight : {imgHeight}");
             Console.WriteLine($"src : {src}");
-
-
             foreach (var ratio in roiRatios)
             {
                 int rectX = (int)(ratio.x * imgWidth);
@@ -323,7 +327,8 @@ namespace OcrLiteLib
                 DetectTime = totalTimeMs
             };
         }
-        private OcrResult DetectOnce2(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio){
+        private OcrResult DetectOnce2(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
+        {
             Mat textBoxPaddingImg = src.Clone();
             int thickness = OcrUtils.GetThickness(src);
             Stopwatch totalWatch = Stopwatch.StartNew();
@@ -333,13 +338,13 @@ namespace OcrLiteLib
             int imgHeight = src.Height;
 
             // 1. ROI 영역 비율 정의
-            var roiRatios = new List<(float x, float y, float width, float height)>
-            {
-                //x, y ,width ,height
-                (0.56f, 0.21f, 0.27f, 0.08f), // 일련번호
-                (0.28f, 0.27f, 0.4f, 0.17f),       // 금액
-                (0f, 0.717f, 1f, 1f)       // MICR
-            };
+            //var roiRatios = new List<(float x, float y, float width, float height)>
+            //{
+            //    //x, y ,width ,height
+            //    (0.56f, 0.21f, 0.27f, 0.08f), // 일련번호
+            //    (0.28f, 0.27f, 0.4f, 0.17f),       // 금액
+            //    (0f, 0.717f, 1f, 1f)       // MICR
+            //};
 
             // 2. 각 ROI 영역 및 대응 모델 설정
             var roiSettings = new List<(Rectangle roi, CrnnNet model)>();;
@@ -349,8 +354,8 @@ namespace OcrLiteLib
 
                 int x = (int)(xRatio * imgWidth);
                 int y = (int)(yRatio * imgHeight);
-                int w = (int)((wRatio > 0 ? wRatio : 1 - xRatio) * imgWidth);
-                int h = (int)((hRatio > 0 ? hRatio : 1 - yRatio) * imgHeight);
+                int w = (int)(wRatio * imgWidth);
+                int h = (int)(hRatio * imgHeight);
 
                 Rectangle roi = Rectangle.Intersect(new Rectangle(x, y, w, h), new Rectangle(0, 0, imgWidth, imgHeight));
 
@@ -427,7 +432,7 @@ namespace OcrLiteLib
             };
         }
 
-        private OcrResult DetectOnce3(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio)
+        private OcrResult DetectOnce3(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
         {
             Mat textBoxPaddingImg = src.Clone();
             int thickness = OcrUtils.GetThickness(src);
@@ -438,12 +443,12 @@ namespace OcrLiteLib
             int imgHeight = src.Height;
 
             // 1. ROI 영역 비율 정의
-            var roiRatios = new List<(float x, float y, float width, float height)>
-            {
-                (0.58f, 0.21f, 0.2f, 0.08f), // 일련번호
-                (0.28f, 0.29f, 0.4f, 0.12f),  // 금액
-                (0f, 0.695f, 1f, 0f)          // MICR
-            };
+            //var roiRatios = new List<(float x, float y, float width, float height)>
+            //{
+            //    (0.58f, 0.21f, 0.2f, 0.08f), // 일련번호
+            //    (0.28f, 0.29f, 0.4f, 0.12f),  // 금액
+            //    (0f, 0.695f, 1f, 0f)          // MICR
+            //};
 
             // 2. 마스킹을 위한 mask 생성
             var roiSettings = new List<(Rectangle roi, CrnnNet model)>();
@@ -453,10 +458,15 @@ namespace OcrLiteLib
             for (int i = 0; i < roiRatios.Count; i++)
             {
                 var (xRatio, yRatio, wRatio, hRatio) = roiRatios[i];
+
+                Console.WriteLine("==================================");
+                Console.WriteLine(imgHeight);
+                Console.WriteLine(hRatio);
                 int x = (int)(xRatio * imgWidth);
                 int y = (int)(yRatio * imgHeight);
-                int w = (int)((wRatio > 0 ? wRatio : 1 - xRatio) * imgWidth);
-                int h = (int)((hRatio > 0 ? hRatio : 1 - yRatio) * imgHeight);
+                int w = (int)(wRatio * imgWidth);
+                int h = (int)(hRatio  * imgHeight);
+                Console.WriteLine(h);
                 Rectangle roi = Rectangle.Intersect(new Rectangle(x, y, w, h), new Rectangle(0, 0, imgWidth, imgHeight));
 
                 // 마스크에서 ROI 영역만 흰색으로
@@ -544,7 +554,7 @@ namespace OcrLiteLib
             };
         }
 
-        private OcrResult DetectOnce4(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio, bool useCrnnNet2 = false)
+        private OcrResult DetectOnce4(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio,  List<(float x, float y, float width, float height)> roiRatios, bool useCrnnNet2 = false)
         {
             Mat textBoxPaddingImg = src.Clone();
             int thickness = OcrUtils.GetThickness(src);

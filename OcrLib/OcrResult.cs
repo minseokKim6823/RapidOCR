@@ -49,6 +49,7 @@ namespace OcrLiteLib
         public List<float> CharScores { get; set; }
         public float CrnnTime { get; set; }
         public float BlockTime { get; set; }
+        public string ModelType { get; set; }
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

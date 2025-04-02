@@ -267,6 +267,7 @@
             this.keysNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.keysNameTextBox.TabIndex = 18;
             this.keysNameTextBox.Text = "num_dict.txt";
+            this.keysNameTextBox.TextChanged += new System.EventHandler(this.keysNameTextBox_TextChanged);
             // 
             // label5
             // 
@@ -421,7 +422,7 @@
             this.paddingNumeric.Size = new System.Drawing.Size(99, 25);
             this.paddingNumeric.TabIndex = 7;
             this.paddingNumeric.Value = new decimal(new int[] {
-            50,
+            0,
             0,
             0,
             0});
@@ -514,7 +515,7 @@
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Outset;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 135F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 137F));
             this.tableLayoutPanel1.Controls.Add(this.boxScoreThreshNumeric, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.imgResizeNumeric, 1, 1);
