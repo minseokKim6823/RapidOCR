@@ -35,7 +35,7 @@ namespace OcrLiteLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message + ex.StackTrace);
+                //Console.WriteLine(ex.Message + ex.StackTrace);
                 throw ex;
             }
         }
@@ -465,11 +465,11 @@ namespace OcrLiteLib
             Mat maskedSrc = new Mat();
             CvInvoke.BitwiseAnd(src, src, maskedSrc, mask);
 
-            if (!isDebugImg)
-            {
-                CvInvoke.Imshow("Masked ROI Image", maskedSrc);
-                CvInvoke.WaitKey(1); // 바로 사라지지 않도록
-            }
+            //if (!isDebugImg)
+            //{
+            //    CvInvoke.Imshow("Masked ROI Image", maskedSrc);
+            //    CvInvoke.WaitKey(1); // 바로 사라지지 않도록
+            //}
 
             // 4. ROI 기반 탐지 및 인식
             var filteredTextBoxes = new List<TextBox>();
@@ -601,7 +601,7 @@ namespace OcrLiteLib
                     Text = textLines[i].Text,
                     CharScores = textLines[i].CharScores,
                     CrnnTime = textLines[i].Time,
-                    ModelType = recogModels[i] == crnnNet2 ? "MICR" : "NUM"
+                    ModelType = useCrnnNet2 ? "MICR" : "NUM"
                 });
             }
 
