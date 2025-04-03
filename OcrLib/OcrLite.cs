@@ -123,6 +123,8 @@ namespace OcrLiteLib
             int resize = (maxSideLen <= 0 || maxSideLen > originMaxSide) ? originMaxSide : maxSideLen;
             resize += 2 * padding;
 
+           
+
             Rectangle paddingRect = new Rectangle(padding, padding, src.Cols, src.Rows);
             Mat paddingSrc = OcrUtils.MakePadding(src, padding);
 
@@ -461,15 +463,22 @@ namespace OcrLiteLib
                 roiSettings.Add((roi, model));
             }
 
-            // 3. 마스킹 적용
-            Mat maskedSrc = new Mat();
-            CvInvoke.BitwiseAnd(src, src, maskedSrc, mask);
+            // 1. 전체 흰색 배경 이미지 생성
+            Mat whiteBg = new Mat(src.Size, DepthType.Cv8U, 3);
+            whiteBg.SetTo(new MCvScalar(255, 255, 255)); // 흰색 배경
 
-            //if (!isDebugImg)
-            //{
-            //    CvInvoke.Imshow("Masked ROI Image", maskedSrc);
-            //    CvInvoke.WaitKey(1); // 바로 사라지지 않도록
-            //}
+            // 2. 마스크에 따라 원본 이미지의 ROI만 흰색 배경 위에 덮어쓰기
+            src.CopyTo(whiteBg, mask);
+
+            // 3. 결과를 maskedSrc로 할당
+            Mat maskedSrc = whiteBg;
+
+
+            if (!isDebugImg)
+            {
+                CvInvoke.Imshow("Masked ROI Image", maskedSrc);
+                CvInvoke.WaitKey(1); // 바로 사라지지 않도록
+            }
 
             // 4. ROI 기반 탐지 및 인식
             var filteredTextBoxes = new List<TextBox>();

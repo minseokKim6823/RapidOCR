@@ -152,8 +152,8 @@ namespace BaiPiaoOcrOnnxCs
             }
             var roiRatios = new List<(float x, float y, float width, float height)>
             {
-                 (0.6f, 0.12f, 0.215f, 0.1f), // 일련번호
-                 (0.23f, 0.23f, 0.48f, 0.135f),  // 금액
+                 (0.7f, 0.12f, 0.05f, 0.1f), // 일련번호
+                 (0.23f, 0.25f, 0.48f, 0.08f),  // 금액
                  (0f, 0.85f, 1f, 0.3f)
             };
             int padding = (int)paddingNumeric.Value;

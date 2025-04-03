@@ -228,7 +228,7 @@
             this.detNameTextBox.Name = "detNameTextBox";
             this.detNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.detNameTextBox.TabIndex = 12;
-            this.detNameTextBox.Text = "en_PP-OCRv3_det_infer.onnx";
+            this.detNameTextBox.Text = "ch_PP-OCRv3_det_infer.onnx";
             // 
             // label11
             // 

@@ -10,7 +10,6 @@ namespace OcrLib
         private SimpleConfig config;
         private string imgPath;
         private int maxSideLen;
-        private Mat image;
         private List<(float x, float y, float width, float height)> roiRatios;
             
         public ThDraftOCR()
@@ -27,7 +26,6 @@ namespace OcrLib
             string keys1Path = config.Get("num_keys_path");
             string keys2Path = config.Get("micr_keys_path");
             roiRatios = config.GetRoiList();
-            image = CvInvoke.Imread(imgPath, Emgu.CV.CvEnum.ImreadModes.Color);
             ocr.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path, numThread);
         }
         public OcrResult DetectFilter(object imgPath)
