@@ -295,11 +295,11 @@ namespace OcrLiteLib
             totalWatch.Stop();
             float totalTimeMs = totalWatch.ElapsedMilliseconds;
 
-            if (!isDebugImg)
-            {
-                CvInvoke.Imshow("ROI Image", textBoxPaddingImg);
-                CvInvoke.WaitKey(1); // 바로 사라지지 않도록
-            }
+            //if (!isDebugImg)
+            //{
+            //    CvInvoke.Imshow("ROI Image", textBoxPaddingImg);
+            //    CvInvoke.WaitKey(1); // 바로 사라지지 않도록
+            //}
             // 결과 반환
             return new OcrResult
             {
@@ -493,13 +493,13 @@ namespace OcrLiteLib
 
             // 5. 텍스트 인식
             var partImages = OcrUtils.GetPartImages(src, filteredTextBoxes);
-            if (isPartImg)
-            {
-                for (int i = 0; i < partImages.Count; i++)
-                {
-                    CvInvoke.Imshow($"PartImg({i})", partImages[i]);
-                }
-            }
+            //if (isPartImg)
+            //{
+            //    for (int i = 0; i < partImages.Count; i++)
+            //    {
+            //        CvInvoke.Imshow($"PartImg({i})", partImages[i]);
+            //    }
+            //}
 
             var textLines = new List<TextLine>();
             for (int i = 0; i < partImages.Count; i++)

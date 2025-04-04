@@ -25,7 +25,12 @@ namespace OcrLib
                     .Where(tb => tb.ModelType == "AMOUNT")
                     .Where(tb => tb.CharScores.Average() >= 0.8f)
                     .OrderBy(tb => tb.BoxPoints.Min(p => p.X))
-                    .Select(tb => tb.Text));
+                    .Select(tb =>
+                    {
+                        var text = tb.Text;
+                        int cutIndex = text.LastIndexOfAny(new[] { '.', '*' });
+                        return cutIndex >= 0 ? text.Substring(0, cutIndex) : text;
+                    }));
 
             // MICR
             var sortedMicrStr = string.Join(" ",
