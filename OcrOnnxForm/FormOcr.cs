@@ -103,6 +103,7 @@ namespace BaiPiaoOcrOnnxCs
             string rec2Path = @"C:\Users\Public\models\micr_rec_250313.onnx";
             string keys1Path = modelsDir + "\\" + keysNameTextBox.Text;
             string keys2Path = @"C:\Users\Public\models\micr_dict.txt";
+            int padding = 5;
             bool isDetExists = File.Exists(detPath);
             if (!isDetExists)
             {
@@ -131,14 +132,14 @@ namespace BaiPiaoOcrOnnxCs
             if (isDetExists && isRec1Exists && isRec2Exists && isKeys1Exists && isKeys2Exists)
             {
                 ocrEngin = new OcrLite();
-                ocrEngin.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path, (int)numThreadNumeric.Value);
+                ocrEngin.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path, (int)numThreadNumeric.Value,padding );
             }
             else
             {
                 MessageBox.Show("初始化失败，请确认模型文件夹和文件后，重新初始化！");
             }
 
-            ocrEngin.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path, (int)numThreadNumeric.Value);
+            ocrEngin.InitModels(detPath, rec1Path, rec2Path, keys1Path, keys2Path, (int)numThreadNumeric.Value, padding);
             if (ocrEngin == null)
             {
                 MessageBox.Show("未初始化，无法执行!");
@@ -152,11 +153,10 @@ namespace BaiPiaoOcrOnnxCs
             }
             var roiRatios = new List<(float x, float y, float width, float height)>
             {
-                 (0.7f, 0.12f, 0.05f, 0.1f), // 일련번호
-                 (0.23f, 0.25f, 0.48f, 0.08f),  // 금액
+                 (0.7f, 0.12f, 0.05f, 0.04f), // 일련번호
+                 (0.23f, 0.25f, 0.48f, 0.04f),  // 금액
                  (0f, 0.85f, 1f, 0.3f)
             };
-            int padding = (int)paddingNumeric.Value;
             int imgResize = (int)imgResizeNumeric.Value;
             float boxScoreThresh = (float)boxScoreThreshNumeric.Value;
             float boxThresh = (float)boxThreshNumeric.Value;
@@ -187,6 +187,16 @@ namespace BaiPiaoOcrOnnxCs
         }
 
         private void keysNameTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void boxScoreThreshNumeric_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }

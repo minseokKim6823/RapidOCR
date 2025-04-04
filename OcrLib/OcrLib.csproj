@@ -179,6 +179,7 @@
     <Compile Include="OcrResult.cs" />
     <Compile Include="OcrUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultFilter.cs" />
     <Compile Include="ThDraftOCR.cs" />
     <Compile Include="ScaleParam.cs" />
     <Compile Include="SimpleConfig.cs" />

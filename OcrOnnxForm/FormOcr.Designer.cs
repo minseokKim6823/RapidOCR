@@ -228,7 +228,7 @@
             this.detNameTextBox.Name = "detNameTextBox";
             this.detNameTextBox.Size = new System.Drawing.Size(651, 25);
             this.detNameTextBox.TabIndex = 12;
-            this.detNameTextBox.Text = "ch_PP-OCRv3_det_infer.onnx";
+            this.detNameTextBox.Text = "en_PP-OCRv3_det_infer.onnx";
             // 
             // label11
             // 
@@ -350,8 +350,6 @@
             // doAngleCheckBox
             // 
             this.doAngleCheckBox.AutoSize = true;
-            this.doAngleCheckBox.Checked = true;
-            this.doAngleCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.doAngleCheckBox.Location = new System.Drawing.Point(6, 206);
             this.doAngleCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.doAngleCheckBox.Name = "doAngleCheckBox";
@@ -380,6 +378,7 @@
             this.label4.Size = new System.Drawing.Size(92, 30);
             this.label4.TabIndex = 12;
             this.label4.Text = "boxScoreThresh";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // imgResizeNumeric
             // 
@@ -421,11 +420,6 @@
             this.paddingNumeric.Name = "paddingNumeric";
             this.paddingNumeric.Size = new System.Drawing.Size(99, 25);
             this.paddingNumeric.TabIndex = 7;
-            this.paddingNumeric.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
             // 
             // label2
             // 
@@ -461,10 +455,11 @@
             this.boxScoreThreshNumeric.Size = new System.Drawing.Size(99, 25);
             this.boxScoreThreshNumeric.TabIndex = 13;
             this.boxScoreThreshNumeric.Value = new decimal(new int[] {
-            5,
+            6,//boxScoreThresh
             0,
             0,
             65536});
+            this.boxScoreThreshNumeric.ValueChanged += new System.EventHandler(this.boxScoreThreshNumeric_ValueChanged);
             // 
             // tableLayoutPanel3
             // 
@@ -515,7 +510,7 @@
             this.tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Outset;
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 137F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 139F));
             this.tableLayoutPanel1.Controls.Add(this.boxScoreThreshNumeric, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.label4, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.imgResizeNumeric, 1, 1);

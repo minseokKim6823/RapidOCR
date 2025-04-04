@@ -79,8 +79,6 @@ namespace OcrLiteLib
             for (int i = 0; i < textBoxes.Count; ++i)
             {
                 Mat partImg = GetRotateCropImage(src, textBoxes[i].Points);
-                //Mat partImg = new Mat();
-                //GetRoiFromBox(src, partImg, textBoxes[i].Points);
                 partImages.Add(partImg);
             }
             return partImages;

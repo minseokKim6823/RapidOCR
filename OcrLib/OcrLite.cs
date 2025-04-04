@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Diagnostics;
 using Emgu.CV.Structure;
+using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace OcrLiteLib
 {
@@ -13,7 +15,6 @@ namespace OcrLiteLib
         public bool isPartImg { get; set; }
         public bool isDebugImg { get; set; }
 
-        private int padding = 0;
         private DbNet dbNet;
         private CrnnNet crnnNet1;
         private CrnnNet crnnNet2;
@@ -25,7 +26,7 @@ namespace OcrLiteLib
             crnnNet2 = new CrnnNet();
         }
 
-        public void InitModels(string detPath, string rec1Path, string rec2Path, string keys1Path, string keys2Path, int numThread)
+        public void InitModels(string detPath, string rec1Path, string rec2Path, string keys1Path, string keys2Path, int numThread, int padding)
         {
             try
             {
@@ -204,7 +205,6 @@ namespace OcrLiteLib
             totalWatch.Start();
 
             var startTicks = DateTime.Now.Ticks;
-            Console.WriteLine("---------- step: dbNet getTextBoxes ----------");
 
             var textBoxes = dbNet.GetTextBoxes(src, scale, boxScoreThresh, boxThresh, unClipRatio);
             var dbNetTime = (DateTime.Now.Ticks - startTicks) / 10000F; //탐색 속도
@@ -214,9 +214,6 @@ namespace OcrLiteLib
             int imgWidth = src.Width;
             int imgHeight = src.Height;
 
-            Console.WriteLine($"imgWidth : {imgWidth}");
-            Console.WriteLine($"imgHeight : {imgHeight}");
-            Console.WriteLine($"src : {src}");
             foreach (var ratio in roiRatios)
             {
                 int rectX = (int)(ratio.x * imgWidth);
@@ -226,106 +223,96 @@ namespace OcrLiteLib
 
                 roiRects.Add(new Rectangle(rectX, rectY, rectWidth, rectHeight));
             };
-            Rectangle micrRoi = roiRects.Count > 2 ? roiRects[2] : Rectangle.Empty;
+            Rectangle serialRoi = roiRects[0];
+            Rectangle amountRoi = roiRects[1];
+            Rectangle micrRoi = roiRects[2];
 
             // 이후 기존 로직 유지
-            List<TextBox> filteredTextBoxes = new List<TextBox>();
+            List<TextBox> filteredSerialTextBoxes = new List<TextBox>();
+            List<TextBox> filteredAmountTextBoxes = new List<TextBox>();
+            List<TextBox> filteredMicrTextBoxes = new List<TextBox>();
 
             foreach (var box in textBoxes)
             {
-                if (box.Points == null || box.Points.Count == 0)
-                {
-                    Console.WriteLine("Skipping box: no points.");
-                    continue;
-                }
-
                 Rectangle boxRect = OcrUtils.GetBoundingBox(box.Points);
                 if (boxRect.Width <= 0 || boxRect.Height <= 0)
                 {
-                    Console.WriteLine("Skipping box: invalid bounding box.");
                     continue;
                 }
 
-                bool intersectsAnyROI = roiRects.Exists(roi => roi.IntersectsWith(Rectangle.Round(boxRect)));
+                if (serialRoi.IntersectsWith(Rectangle.Round(boxRect))) {
+                    filteredSerialTextBoxes.Add(box);
+                    continue;
+                }
+                if (amountRoi.IntersectsWith(Rectangle.Round(boxRect))) {
+                    filteredAmountTextBoxes.Add(box);
+                    continue;
+                }
+                if (micrRoi.IntersectsWith(Rectangle.Round(boxRect))) {
+                    filteredMicrTextBoxes.Add(box);
+                    continue;
+                }
 
-                if (intersectsAnyROI)
-                {
-                    filteredTextBoxes.Add(box);
-                    Console.WriteLine($"Box added: {boxRect}");
-                }
-                else
-                {
-                    Console.WriteLine($"Box skipped (no ROI match): {boxRect}");
-                }
             }
 
             // 3. 이후 과정은 필터링된 박스 기준으로만 수행!
-            List<Mat> partImages = OcrUtils.GetPartImages(src, filteredTextBoxes);
+            List<Mat> serialPartImages = OcrUtils.GetPartImages(src, filteredSerialTextBoxes);
+            List<Mat> amountPartImages = OcrUtils.GetPartImages(src, filteredAmountTextBoxes);
+            List<Mat> micrPartImages = OcrUtils.GetPartImages(src, filteredMicrTextBoxes);
 
-            if (isPartImg)
-            {
-                for (int i = 0; i < partImages.Count; i++)
-                {
-                    CvInvoke.Imshow($"PartImg({i})", partImages[i]);
-                }
-            }
-
-            List<TextLine> textLines = new List<TextLine>();
-
-            List<string> modelTypes = new List<string>();
-
-            for (int i = 0; i < partImages.Count; i++)
-            {
-                Rectangle boxRect = OcrUtils.GetBoundingBox(filteredTextBoxes[i].Points);
-                bool isMicrBox = micrRoi.IntersectsWith(boxRect);
-
-                var textLine = isMicrBox
-                    ? crnnNet2.GetTextLine(partImages[i])  // MICR 영역
-                    : crnnNet1.GetTextLine(partImages[i]); // 일반 영역
-
-
-                textLines.Add(textLine);
-                modelTypes.Add(isMicrBox ? "MICR" : "NUM");
-            }
 
             // 최종 결과 조합
             List<TextBlock> textBlocks = new List<TextBlock>();
 
-            for (int i = 0; i < textLines.Count; ++i)
+            void ProcessBlocks(List<TextBox> boxes, List<Mat> images, string modelType, Func<Mat, TextLine> ocrFunc)
             {
-                textBlocks.Add(new TextBlock
+                for (int i = 0; i < boxes.Count; i++)
                 {
-                    BoxPoints = filteredTextBoxes[i].Points,
-                    BoxScore = filteredTextBoxes[i].Score,
-                    Text = textLines[i].Text,
-                    CharScores = textLines[i].CharScores,
-                    CrnnTime = textLines[i].Time,
-                    ModelType = modelTypes[i]
-                });
+                    var textLine = ocrFunc(images[i]);
+
+                    textBlocks.Add(new TextBlock
+                    {
+                        BoxPoints = boxes[i].Points,
+                        BoxScore = boxes[i].Score,
+                        Text = textLine.Text,
+                        CharScores = textLine.CharScores,
+                        CrnnTime = textLine.Time,
+                        ModelType = modelType
+                    });
+                }
             }
 
+            // 각각 처리
+            ProcessBlocks(filteredSerialTextBoxes, serialPartImages, "SERIAL", crnnNet1.GetTextLine);
+            ProcessBlocks(filteredAmountTextBoxes, amountPartImages, "AMOUNT", crnnNet1.GetTextLine);
+            ProcessBlocks(filteredMicrTextBoxes, micrPartImages, "MICR", crnnNet2.GetTextLine);
+
             // 박스 시각화도 ROI 필터링된 것만 그린다!
-            OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredTextBoxes, thickness);
+            //OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredSerialTextBoxes, thickness);
+            //OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredAmountTextBoxes, thickness);
+            //OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredMicrTextBoxes, thickness);
 
             totalWatch.Stop();
             float totalTimeMs = totalWatch.ElapsedMilliseconds;
 
-            Console.WriteLine($"===== 전체 인식 시간 : {totalTimeMs} ms =====");
-
+            if (!isDebugImg)
+            {
+                CvInvoke.Imshow("ROI Image", textBoxPaddingImg);
+                CvInvoke.WaitKey(1); // 바로 사라지지 않도록
+            }
             // 결과 반환
             return new OcrResult
             {
                 TextBlocks = textBlocks,
                 DbNetTime = dbNetTime,
                 BoxImg = new Mat(textBoxPaddingImg, originRect),
-                StrRes = string.Join(Environment.NewLine, textBlocks.ConvertAll(tb => tb.Text)),
+                StrRes = "",
                 DetectTime = totalTimeMs
             };
         }
         private OcrResult DetectOnce2(Mat src, Rectangle originRect, ScaleParam scale, float boxScoreThresh, float boxThresh, float unClipRatio, List<(float x, float y, float width, float height)> roiRatios)
         {
             Mat textBoxPaddingImg = src.Clone();
-            int thickness = OcrUtils.GetThickness(src);
             Stopwatch totalWatch = Stopwatch.StartNew();
             long startTicks = DateTime.Now.Ticks;
 
@@ -338,7 +325,7 @@ namespace OcrLiteLib
             {
                 var (xRatio, yRatio, wRatio, hRatio) = roiRatios[i];
 
-                int x = (int)(xRatio * imgWidth);
+                int x = (int)(xRatio * imgWidth+5);
                 int y = (int)(yRatio * imgHeight);
                 int w = (int)(wRatio * imgWidth);
                 int h = (int)(hRatio * imgHeight);
@@ -406,7 +393,6 @@ namespace OcrLiteLib
                 });
             }
 
-            OcrUtils.DrawTextBoxes(textBoxPaddingImg, filteredTextBoxes, thickness);
             totalWatch.Stop();
 
             return new OcrResult
@@ -474,11 +460,11 @@ namespace OcrLiteLib
             Mat maskedSrc = whiteBg;
 
 
-            if (!isDebugImg)
-            {
-                CvInvoke.Imshow("Masked ROI Image", maskedSrc);
-                CvInvoke.WaitKey(1); // 바로 사라지지 않도록
-            }
+            //if (!isDebugImg)
+            //{
+            //    CvInvoke.Imshow("Masked ROI Image", maskedSrc);
+            //    CvInvoke.WaitKey(1); // 바로 사라지지 않도록
+            //}
 
             // 4. ROI 기반 탐지 및 인식
             var filteredTextBoxes = new List<TextBox>();
