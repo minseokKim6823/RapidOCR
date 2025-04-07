@@ -14,7 +14,7 @@ namespace OcrLib
             var sortedSerialStr = string.Join(" ",
                     textBlocks
                         .Where(tb => tb.ModelType == "SERIAL")
-                        .OrderBy(tb => tb.BoxPoints.Min(p => p.X))
+                        .Where(tb => tb.CharScores.Average() >= 0.8f)
                         .Select(tb => tb.Text.Length > 8
                         ? tb.Text.Substring(tb.Text.Length - 8) // 뒤에서 8글자
                         : tb.Text));
@@ -37,7 +37,17 @@ namespace OcrLib
                 textBlocks
                     .Where(tb => tb.ModelType == "MICR")
                     .OrderBy(tb => tb.BoxPoints.Min(p => p.X))
-                    .Select(tb => tb.Text));
+                    .Select(tb =>
+                    {
+                        var text = tb.Text;
+                        if (string.IsNullOrEmpty(text)) return text;
+
+                        return text
+                            .Replace("A", ":")
+                            .Replace("B", ";")
+                            .Replace("C", "<")
+                            .Replace("D", "=");
+                    }));
 
             Result = new OcrResult
             {
