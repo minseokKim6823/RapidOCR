@@ -37,3 +37,4 @@
 ### 其它
 * 修改模型路径，模型名称，线程数，必须“重新初始化”才能生效
 * 输入参数说明请参考[RapidOcrOnnx](https://github.com/RapidAI/RapidOcrOnnx/tree/61d7b434d2b773eb61dab85328240789f69b3ae0#%E8%BE%93%E5%85%A5%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E)
+# CSharp
